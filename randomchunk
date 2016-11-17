@@ -12,7 +12,7 @@ randomsize=0
 append=""
 
 # use getopts to collect parameters
-while getopts "i:o:s:n:x:raq" OPTION
+while getopts "i:o:s:n:x:p:raq" OPTION
 do
   case $OPTION in
 	i)
@@ -47,6 +47,11 @@ do
 	  ok_if_short=1
 	  # just copy entire file if it is not large enough
 	  ;;
+  p)
+    #seeding with non-numeric values always yields 20034 
+    seed="$OPTARG"
+    RANDOM="$seed"
+    echo $RANDOM
   esac
 done
 
@@ -57,6 +62,7 @@ then
 	echo "	-i infile	file to read chunk from"
 	echo "	-o outfile	file to write chunk to"
 	echo "	-s size		size (in kilobytes) of output"
+  echo "  -p seed   seed for the PRNG"
 	echo "	-r			chose a random size subset"
 	echo "	-n			minimum size (in KB) when using random selection"
 	echo "	-x			maximum size (in KB) when using random selection"
