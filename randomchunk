@@ -51,7 +51,6 @@ do
     #seeding with non-numeric values always yields 20034 
     seed="$OPTARG"
     RANDOM="$seed"
-    echo $RANDOM
   esac
 done
 
