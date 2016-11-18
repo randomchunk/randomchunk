@@ -47,10 +47,10 @@ do
 	  ok_if_short=1
 	  # just copy entire file if it is not large enough
 	  ;;
-  p)
-    #seeding with non-numeric values always yields 20034 
-    seed="$OPTARG"
-    RANDOM="$seed"
+	p)
+	    #seeding with non-numeric values always yields 20034 
+	    seed="$OPTARG"
+	    RANDOM="$seed"
   esac
 done
 
@@ -61,12 +61,12 @@ then
 	echo "	-i infile	file to read chunk from"
 	echo "	-o outfile	file to write chunk to"
 	echo "	-s size		size (in kilobytes) of output"
-  echo "  -p seed   seed for the PRNG"
-	echo "	-r			chose a random size subset"
-	echo "	-n			minimum size (in KB) when using random selection"
-	echo "	-x			maximum size (in KB) when using random selection"
-	echo "	-a			append to ouput file rather than overwriting"
-	echo "	-q			if file is not large enough, just copy entire file"
+	echo "	-p seed		seed for the PRNG"
+	echo "	-r		make a random size chunk"
+	echo "	-n		minimum size for -r (in KB)"
+	echo "	-x		maximum size for -r (in KB)"
+	echo "	-a		append to ouput file rather than overwriting"
+	echo "	-q		if file is not large enough, just copy entire file"
 	echo ""
   exit 1
 fi
@@ -146,7 +146,7 @@ then
 fi
 
 skip=$(( RANDOM % ( infilesize - size ) ))
-echo "Skipping $skip bytes out of $infilesize and reading $size bytes to $outfile"
+echo "Skipping $skip KB out of $infilesize and reading $size KB to $outfile"
 if dd if="$infile" of=$outfile bs=1024 count=$size skip=$skip $append 2>&1
 then
 	hash=$(sha256sum $outfile | cut -d " " -f 1)
