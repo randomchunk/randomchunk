@@ -71,12 +71,6 @@ then
   exit 1
 fi
 
-if [[ "$infile" == "RND" ]]
-then
-	infile=$(pickrandom ~/corpora)
-fi
-echo "Infile is: '$infile'"
-
 # get file size
 infilesize=$(( $(stat -c%s "$infile") / 1024 ))
 
