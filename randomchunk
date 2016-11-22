@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # extract a piece from a file
+# released under the terms of the GPL
+# https://www.gnu.org/licenses/gpl-3.0.txt
 
 OPTIND=""
 infile=""
