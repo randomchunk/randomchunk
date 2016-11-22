@@ -46,16 +46,31 @@ do
 	  info "Output file is: '$outfile'"
 	  ;;
 	s)
-		size=$((OPTARG))
-	  info "Chunk size is: '$size'"
+		size="$OPTARG"
+    if [ "$size" -eq "$size" ] 2>/dev/null
+    then
+	    info "Chunk size is: '$size'"
+    else
+      errquit "Size $size is not a number."
+    fi
 	  ;;
 	n)
-		minsize=$((OPTARG))
-	  info "Min chunk size is: '$minsize'"
+		minsize="$OPTARG"
+    if [ "$minsize" -eq "$minsize" ] 2>/dev/null
+    then
+	    info "Min chunk size is: '$minsize'"
+    else
+      errquit "Min chunk size $minsize is not a number."
+    fi
 	  ;;
 	x)
-		maxsize=$((OPTARG))
-	  info "Max chunk size is: '$maxsize'"
+		maxsize="$OPTARG"
+    if [ "$maxsize" -eq "$maxsize" ] 2>/dev/null
+    then
+	    info "Max chunk size is: '$maxsize'"
+    else
+      errquit "Max chunk size $maxsize is not a number."
+    fi
 	  ;;
 	r)
 	  randomsize=1
@@ -70,9 +85,15 @@ do
 	  # just copy entire file if it is not large enough
 	  ;;
 	p)
-	    #seeding with non-numeric values always yields 20034 
-	    seed="$OPTARG"
+	  #seeding with non-numeric values always yields 20034 
+	  seed="$OPTARG"
+    if [ "$seed" -eq "$seed" ] 2>/dev/null
+    then
+	    info "Seed is $seed."
 	    RANDOM="$seed"
+    else
+      errquit "Seed $seed is not a number."
+    fi
 		;;
 	v)
 		# enable verbose mode
