@@ -133,6 +133,8 @@ then
 		if [[ $ok_if_short == 1 ]]
 		then
 			info "File is too small for this size so we will copy the whole thing. (-q)"
+			cp -v "$infile" $outfile
+			exit 0
 		fi
 	  errquit "Size ${size}K requested, but '$infile' is only ${infilesize}K bytes, aborting." 1>&2
 
@@ -149,18 +151,27 @@ then
 		if [[ $ok_if_short == 1 ]]
 		then
 			info "WARNING: Max size is larger than file size. May end up copying the entire file(-q)"
-			cp -v "$infile" $outfile
-			exit 0
-		fi
-
+    else
 	  errquit "Maxsize ${maxsize}K is greater than ${infilesize}K, aborting." 1>&2
-
+    fi
 	elif (( $minsize > $maxsize ))
 	then
 	  errquit "Minsize (${minsize}K) cannot be larger than maxsize (${maxsize}K), aborting." 1>&2
 	fi
 else
   maxsize=$infilesize
+fi
+
+if (( $minsize > $infilesize )) 
+then
+	if [[ $ok_if_short == 1 ]]
+	then
+    info "Minimum size is greater than file size, so we copy the entire thing (-q)"
+		cp -v "$infile" $outfile
+		exit 0
+  else
+    errquit "Minimum size is greater than file size. This should never run because either minsize > maxsize or maxsize > infile size"
+  fi
 fi
 
 if (( $minsize < 0 ))
