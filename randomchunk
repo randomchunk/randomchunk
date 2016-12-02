@@ -130,7 +130,9 @@ fi
 
 if [ ! -z $maxsize ]
 then
-	if (( $maxsize > $infilesize ))
+  #does ascii comparison instead of int comparison. 
+  #so maxsize 28 is "larger" than 275 for example. 
+	if [ "$maxsize" \> "$infilesize" ]
 	then
 	  errquit "Maxsize ${maxsize}K is greater than ${infilesize}K, aborting." 1>&2
 	elif (( $minsize > $maxsize ))
