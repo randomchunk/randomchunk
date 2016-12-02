@@ -143,11 +143,6 @@ else
   maxsize=$infilesize
 fi
 
-if (( $minsize < 0 ))
-then
-  errquit "Minsize (${minsize}K) cannot be negative, aborting." 1>&2
-fi
-
 if [ -f "$infile" ]
 then
 	if [ ! -r "$infile" ]
