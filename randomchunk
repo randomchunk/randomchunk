@@ -123,6 +123,12 @@ fi
 # get file size
 infilesize=$(( $(stat -c%s "$infile") / 1024 ))
 
+if [ -z $size ] && ! [ $randomsize == 1 ]
+then
+  errquit "No size specified (must specify -s or -r)"
+fi
+
+
 if [ ! -z $size ]
 then
 	if (( $size < 0 ))
