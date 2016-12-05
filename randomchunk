@@ -10,11 +10,12 @@ minsize=0
 maxsize=""
 randomsize=0
 append=""
-VERBOSE=0
+#set this to 1 to output debugging statements
+DEBUG=0
 
 function errquit 
 {
-	if [[ $VERBOSE == 1 ]]
+	if [[ $DEBUG == 1 ]]
 	then
 		echo $@
 	else
@@ -23,41 +24,41 @@ function errquit
 	exit 1
 }
 
-function info
+function debug
 {
-	if [[ $VERBOSE == 1 ]]
+	if [[ $DEBUG == 1 ]]
 	then
 		echo $@
 	fi
 }
 
 # use getopts to collect parameters
-while getopts "i:o:s:n:x:p:raqv" OPTION
+while getopts "i:o:s:n:x:p:raq" OPTION
 do
   case $OPTION in
 	i)
 	  infile="$OPTARG"
-	  info "Input file is: '$infile'"
+	  debug "Input file is: '$infile'"
 	  ;;
 	o)
 	  outfile="$OPTARG"
-	  info "Output file is: '$outfile'"
+	  debug "Output file is: '$outfile'"
 	  ;;
 	s)
 		size=$((OPTARG))
-	  info "Chunk size is: '$size'"
+	  debug "Chunk size is: '$size'"
 	  ;;
 	n)
 		minsize=$((OPTARG))
-	  info "Min chunk size is: '$minsize'"
+	  debug "Min chunk size is: '$minsize'"
 	  ;;
 	x)
 		maxsize=$((OPTARG))
-	  info "Max chunk size is: '$maxsize'"
+	  debug "Max chunk size is: '$maxsize'"
 	  ;;
 	r)
 	  randomsize=1
-	  info "A random-sized subset of the file will be chosen."
+	  debug "A random-sized subset of the file will be chosen."
 	  ;;
 	a)
 	  append="conv=notrunc oflag=append"
@@ -71,10 +72,6 @@ do
 	    #seeding with non-numeric values always yields 20034 
 	    seed="$OPTARG"
 	    RANDOM="$seed"
-		;;
-	v)
-		# enable verbose mode
-		VERBOSE=1
 		;;
   esac
 done
@@ -101,7 +98,7 @@ if [[ "$infile" == "RND" ]]
 then
 	infile=$(pickrandom ~/corpora)
 fi
-info "Infile is: '$infile'"
+debug "Infile is: '$infile'"
 
 # get file size
 infilesize=$(( $(stat -c%s "$infile") / 1024 ))
@@ -115,7 +112,7 @@ then
 	then
 		if [[ $ok_if_short == 1 ]]
 		then
-			info "File is too small for this size so we will copy the whole thing. (-q)"
+			debug "File is too small for this size so we will copy the whole thing. (-q)"
 			cp -v "$infile" $outfile
 			exit 0
 		fi
@@ -124,7 +121,7 @@ then
 
 	elif (( $minsize > 0 )) || [ ! -z $maxsize ] || [[ $randomsize == 1 ]]
 	then
-  		info "WARNING: explicit size argument (${size}K) OVERRIDES random/min/max settings."
+  		debug "WARNING: explicit size argument (${size}K) OVERRIDES random/min/max settings."
 	fi
 fi
 
@@ -161,11 +158,11 @@ then
 		size=$(( RANDOM % infilesize ))
 	done
   	
-	info "Random size: ${size}K"
+	debug "Random size: ${size}K"
 fi
 
 skip=$(( RANDOM % ( infilesize - size ) ))
-info "Skipping $skip KB out of $infilesize and reading $size KB to $outfile"
+debug "Skipping $skip KB out of $infilesize and reading $size KB to $outfile"
 if dd if=$infile of=$outfile bs=1024 count=$size skip=$skip $append 2>&1
 then
 	hash=$(sha256sum $outfile | cut -d " " -f 1)
