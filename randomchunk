@@ -128,7 +128,6 @@ then
   errquit "No size specified (must specify -s or -r)"
 fi
 
-
 if [ ! -z $size ]
 then
 	if (( $size < 0 ))
@@ -197,7 +196,7 @@ fi
 
 if [[ $randomsize == 1 ]]
 then
-	size=0
+  size=$(( RANDOM % infilesize ))
   	while (( $size < $minsize )) || (( $size > $maxsize ))
   	do
 		size=$(( RANDOM % infilesize ))
