@@ -143,9 +143,14 @@ else
   maxsize=$infilesize
 fi
 
-if [ ! -f "$infile" ]
+if [ -f "$infile" ]
 then
-	errquit "Infile '$infile' does not exist." 1>&2
+	if [ ! -r "$infile" ]
+	then
+	  errquit "Infile '$infile' exists but is not readable." 1>&2
+	fi
+  else
+	  errquit "Infile '$infile' does not exist." 1>&2
 fi
 
 if [[ $randomsize == 1 ]]
