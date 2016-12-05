@@ -39,6 +39,16 @@ do
   case $OPTION in
 	i)
 	  infile="$OPTARG"
+    if [ -f "$infile" ]
+    then
+    	if [ ! -r "$infile" ]
+    	then
+    	  errquit "Infile '$infile' exists but is not readable." 1>&2
+    	fi
+      else
+    	  errquit "Infile '$infile' does not exist." 1>&2
+    fi
+
 	  info "Input file is: '$infile'"
 	  ;;
 	o)
@@ -101,6 +111,11 @@ do
 	#	;;
   esac
 done
+
+if [ -z $seed ] ; then
+  echo "-p option required"
+  exit 0
+fi
 
 if [ -z "$infile" ] || [ -z $outfile ]
 then
@@ -182,16 +197,6 @@ fi
 if (( $minsize < 0 ))
 then
   errquit "Minsize (${minsize}K) cannot be negative, aborting." 1>&2
-fi
-
-if [ -f "$infile" ]
-then
-	if [ ! -r "$infile" ]
-	then
-	  errquit "Infile '$infile' exists but is not readable." 1>&2
-	fi
-  else
-	  errquit "Infile '$infile' does not exist." 1>&2
 fi
 
 if [[ $randomsize == 1 ]] && [ -z $size ]
