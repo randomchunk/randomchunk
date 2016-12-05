@@ -12,10 +12,7 @@
 ./randomchunk -i test/sowpods.txt -o out.txt -n 150 -x 200
 #if we specify -r with no -n it will always give us "randomsize" == 0
 ./randomchunk -i test/sowpods.txt -o out.txt -r
-#doesn't handle special files (will try to copy all of /dev/urandom)
-./randomchunk -i /dev/urandom -o out.txt -s 
-#division by zero if random size of a special file and no sizes specified. 
-./randomchunk -i /dev/urandom -o out.txt -r
+
 
 
 
