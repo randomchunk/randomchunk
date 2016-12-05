@@ -194,7 +194,7 @@ then
 	  errquit "Infile '$infile' does not exist." 1>&2
 fi
 
-if [[ $randomsize == 1 ]]
+if [[ $randomsize == 1 ]] && [ -z $size ]
 then
   size=$(( RANDOM % infilesize ))
   	while (( $size < $minsize )) || (( $size > $maxsize ))
