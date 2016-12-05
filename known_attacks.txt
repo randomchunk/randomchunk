@@ -1,0 +1,18 @@
+#-s should be 255, gets interpreted by script as 173 or something
+./randomchunk -i test/sowpods.txt -o out.txt -s 0255
+#minimum and maximum kb are not properly interpreted, same as above. 
+./randomchunk -i test/sowpods.txt -o out.txt -x 0255 -n 0254 -r
+#max size vs infilesize is a string comparison, not int. So 28 is evaluated as greater than 275 
+./randomchunk -i test/sowpods.txt -o out.txt -x 28 -n 25
+#min size isn't checked, so this won't error
+./randomchunk -i test/sowpods.txt -o out.txt -x -28 -n 25
+#doesn't have a check for -q with random size specified. 
+./randomchunk -i test/sowpods.txt -o out.txt -n 300 -x 400
+#doesn't error if -s not specified and -r not specified
+./randomchunk -i test/sowpods.txt -o out.txt -n 150 -x 200
+#if we specify -r with no -n it will always give us "randomsize" == 0
+./randomchunk -i test/sowpods.txt -o out.txt -r
+
+
+
+
