@@ -13,6 +13,7 @@ maxsize=""
 randomsize=0
 append=""
 VERBOSE=0
+special_infile=0
 
 function errquit 
 {
@@ -39,7 +40,11 @@ do
   case $OPTION in
 	i)
 	  infile="$OPTARG"
-	  info "Input file is: '$infile'"
+    if [ -c "$infile" ]
+    then
+      info "Input file is special"
+      special_infile=1
+    fi
 	  ;;
 	o)
 	  outfile="$OPTARG"
@@ -133,7 +138,8 @@ then
 	if (( $size < 0 ))
 	then
 	  errquit "Size cannot be negative. ($size)"
-	elif (( $size > $infilesize ))
+  #if it's a special file (ie /dev/urandom), we don't care about its "size"
+	elif (( $size > $infilesize )) && [ $special_infile == 0 ]
 	then
 		if [[ $ok_if_short == 1 ]]
 		then
@@ -151,7 +157,7 @@ fi
 
 if [ ! -z $maxsize ]
 then
-	if (( $maxsize > $infilesize ))
+	if (( $maxsize > $infilesize )) && [ $special_infile == 0 ]
 	then
 		if [[ $ok_if_short == 1 ]]
 		then
@@ -167,7 +173,7 @@ else
   maxsize=$infilesize
 fi
 
-if (( $minsize > $infilesize )) 
+if (( $minsize > $infilesize )) && [ $special_infile == 0 ]
 then
 	if [[ $ok_if_short == 1 ]]
 	then
@@ -184,7 +190,7 @@ then
   errquit "Minsize (${minsize}K) cannot be negative, aborting." 1>&2
 fi
 
-if [ -f "$infile" ]
+if [ -e "$infile" ]
 then
 	if [ ! -r "$infile" ]
 	then
@@ -196,16 +202,39 @@ fi
 
 if [[ $randomsize == 1 ]] && [ -z $size ]
 then
-  size=$(( RANDOM % infilesize ))
-  	while (( $size < $minsize )) || (( $size > $maxsize ))
-  	do
-		size=$(( RANDOM % infilesize ))
-	done
+    if [ $special_infile == 0 ]
+    then
+      size=$(( RANDOM % infilesize ))
+  	  while (( $size < $minsize )) || (( $size > $maxsize ))
+  	  do
+		      size=$(( RANDOM % infilesize ))
+	    done
+    #for special files, we don't use filesize to determine size
+    elif [ $special_infile == 1 ]
+    then
+      if [ $maxsize == 0 ]
+      then
+        maxsize=$RANDOM
+      fi
+      size=$RANDOM
+  	  while (( $size < $minsize )) || (( $size > $maxsize ))
+  	  do
+		      size=$RANDOM
+	    done
+    fi
   	
 	info "Random size: ${size}K"
 fi
 
-skip=$(( RANDOM % ( infilesize - size ) ))
+if [ $special_infile == 0 ]
+then
+  skip=$(( RANDOM % ( infilesize - size ) ))
+elif [ $special_infile == 1 ]
+then
+  skip=$RANDOM
+fi
+
+
 info "Skipping $skip KB out of $infilesize and reading $size KB to $outfile"
 if dd if="$infile" of="$outfile" bs=1024 count=$size skip=$skip $append 2>&1
 then
