@@ -34,7 +34,7 @@ function info
 }
 
 # use getopts to collect parameters
-while getopts "i:o:s:n:x:p:raq" OPTION
+while getopts "i:o:s:n:x:p:raqv" OPTION
 do
   case $OPTION in
 	i)
@@ -105,10 +105,10 @@ do
       errquit "Seed $seed is not a number."
     fi
 		;;
-	#v)
+	v)
 		# enable verbose mode
-		#VERBOSE=1
-	#	;;
+		VERBOSE=1
+		;;
   esac
 done
 
@@ -130,7 +130,7 @@ then
 	echo "	-x		maximum size for -r (in KB)"
 	echo "	-a		append to ouput file rather than overwriting"
 	echo "	-q		if file is not large enough, just copy entire file"
-	#echo "	-v		be verbose"
+	echo "	-v		be verbose"
 	echo ""
   exit 1
 fi
