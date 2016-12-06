@@ -43,10 +43,10 @@ do
     then
     	if [ ! -r "$infile" ]
     	then
-    	  errquit "Infile '$infile' exists but is not readable." 1>&2
+    	  errquit "Infile '$infile' exists but is not readable." 
     	fi
       else
-    	  errquit "Infile '$infile' does not exist." 1>&2
+    	  errquit "Infile '$infile' does not exist." 
     fi
 
 	  info "Input file is: '$infile'"
@@ -156,7 +156,7 @@ then
 			cp -v "$infile" $outfile
 			exit 0
 		fi
-	  errquit "Size ${size}K requested, but '$infile' is only ${infilesize}K bytes, aborting." 1>&2
+	  errquit "Size ${size}K requested, but '$infile' is only ${infilesize}K bytes, aborting." 
 
 	elif (( $minsize > 0 )) || [ ! -z $maxsize ] || [[ $randomsize == 1 ]]
 	then
@@ -172,11 +172,11 @@ then
 		then
 			info "WARNING: Max size is larger than file size. May end up copying the entire file(-q)"
     else
-	  errquit "Maxsize ${maxsize}K is greater than ${infilesize}K, aborting." 1>&2
+	  errquit "Maxsize ${maxsize}K is greater than ${infilesize}K, aborting." 
     fi
 	elif (( $minsize > $maxsize ))
 	then
-	  errquit "Minsize (${minsize}K) cannot be larger than maxsize (${maxsize}K), aborting." 1>&2
+	  errquit "Minsize (${minsize}K) cannot be larger than maxsize (${maxsize}K), aborting." 
 	fi
 else
   maxsize=$infilesize
@@ -196,7 +196,7 @@ fi
 
 if (( $minsize < 0 ))
 then
-  errquit "Minsize (${minsize}K) cannot be negative, aborting." 1>&2
+  errquit "Minsize (${minsize}K) cannot be negative, aborting." 
 fi
 
 if [[ $randomsize == 1 ]] && [ -z $size ]
