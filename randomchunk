@@ -117,7 +117,7 @@ then
 			exit 0
 		fi
 
-	  errquit "Size ${size}K requested, but '$infile' is only ${infilesize}K bytes, aborting." 1>&2
+	  errquit "Size ${size}K requested, but '$infile' is only ${infilesize}K bytes, aborting." 
 
 	elif (( $minsize > 0 )) || [ ! -z $maxsize ] || [[ $randomsize == 1 ]]
 	then
@@ -131,10 +131,10 @@ then
   #so maxsize 28 is "larger" than 275 for example. 
 	if [ "$maxsize" > "$infilesize" ]
 	then
-	  errquit "Maxsize ${maxsize}K is greater than ${infilesize}K, aborting." 1>&2
+	  errquit "Maxsize ${maxsize}K is greater than ${infilesize}K, aborting." 
 	elif (( $minsize > $maxsize ))
 	then
-	  errquit "Minsize (${minsize}K) cannot be larger than maxsize (${maxsize}K), aborting." 1>&2
+	  errquit "Minsize (${minsize}K) cannot be larger than maxsize (${maxsize}K), aborting." 
 	fi
 else
   maxsize=$infilesize
@@ -144,10 +144,10 @@ if [ -f "$infile" ]
 then
 	if [ ! -r "$infile" ]
 	then
-	  errquit "Infile '$infile' exists but is not readable." 1>&2
+	  errquit "Infile '$infile' exists but is not readable." 
 	fi
   else
-	  errquit "Infile '$infile' does not exist." 1>&2
+	  errquit "Infile '$infile' does not exist." 
 fi
 
 if [[ $randomsize == 1 ]]
