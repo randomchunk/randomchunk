@@ -34,7 +34,7 @@ function info
 }
 
 # use getopts to collect parameters
-while getopts "i:o:s:n:x:p:raq" OPTION
+while getopts "i:o:s:n:x:p:raqv" OPTION
 do
 	case $OPTION in
 		i)
@@ -112,11 +112,6 @@ do
 		esac
 	done
 
-if [ -z $seed ] ; then
-  echo "-p option required"
-  exit 0
-fi
-
 if [ -z "$infile" ] || [ -z $outfile ]
 then
 	echo "randomchunk -- extract a random chunk from a large file"
@@ -130,7 +125,7 @@ then
 	echo "	-x		maximum size for -r (in KB)"
 	echo "	-a		append to ouput file rather than overwriting"
 	echo "	-q		if file is not large enough, just copy entire file"
-	#echo "	-v		be verbose"
+	echo "	-v		be verbose"
 	echo ""
   exit 1
 fi
