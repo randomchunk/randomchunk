@@ -212,7 +212,7 @@ fi
 
 skip=$(( RANDOM % ( infilesize - size ) ))
 info "Skipping $skip KB out of $infilesize and reading $size KB to $outfile"
-if dd if="$infile" of="$outfile" bs=1024 count=$size skip=$skip $append 2>&1
+if dd if="$infile" of="$outfile" bs=1024 count=$size skip=$skip $append 2> /dev/null
 then
 	hash=$(sha256sum $outfile | cut -d " " -f 1)
 	echo "$infile,$outfile,$size,$skip,$hash" >> rchunk.log
