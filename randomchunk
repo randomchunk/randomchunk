@@ -36,81 +36,81 @@ function info
 # use getopts to collect parameters
 while getopts "i:o:s:n:x:p:raq" OPTION
 do
-  case $OPTION in
-	i)
-	  infile="$OPTARG"
-	  if [ -f "$infile" ]
-	  then
-		  if [ ! -r "$infile" ]
-		  then
-			  errquit "Infile '$infile' exists but is not readable." 1>&2
-		  fi
-	  else
-		  errquit "Infile '$infile' does not exist." 1>&2
-	  fi
+	case $OPTION in
+		i)
+			infile="$OPTARG"
+			if [ -f "$infile" ]
+			then
+				if [ ! -r "$infile" ]
+				then
+					errquit "Infile '$infile' exists but is not readable." 1>&2
+				fi
+			else
+				errquit "Infile '$infile' does not exist." 1>&2
+			fi
 
-	  info "Input file is: '$infile'"
-	  ;;
-	o)
-	  outfile="$OPTARG"
-	  info "Output file is: '$outfile'"
-	  ;;
-	s)
-		size="$OPTARG"
-    if [ "$size" -eq "$size" ] 2>/dev/null
-    then
-	    info "Chunk size is: '$size'"
-    else
-      errquit "Size $size is not a number."
-    fi
-	  ;;
-	n)
-		minsize="$OPTARG"
-    if [ "$minsize" -eq "$minsize" ] 2>/dev/null
-    then
-	    info "Min chunk size is: '$minsize'"
-    else
-      errquit "Min chunk size $minsize is not a number."
-    fi
-	  ;;
-	x)
-		maxsize="$OPTARG"
-    if [ "$maxsize" -eq "$maxsize" ] 2>/dev/null
-    then
-	    info "Max chunk size is: '$maxsize'"
-    else
-      errquit "Max chunk size $maxsize is not a number."
-    fi
-	  ;;
-	r)
-	  randomsize=1
-	  info "A random-sized subset of the file will be chosen."
-	  ;;
-	a)
-	  append="conv=notrunc oflag=append"
-	  # will append instead of overwrite
-	  ;;
-	q)
-	  ok_if_short=1
-	  # just copy entire file if it is not large enough
-	  ;;
-	p)
-	  #seeding with non-numeric values always yields 20034 
-	  seed="$OPTARG"
-    if [ "$seed" -eq "$seed" ] 2>/dev/null
-    then
-	    info "Seed is $seed."
-	    RANDOM="$seed"
-    else
-      errquit "Seed $seed is not a number."
-    fi
-		;;
-	#v)
-		# enable verbose mode
-		#VERBOSE=1
-	#	;;
-  esac
-done
+			info "Input file is: '$infile'"
+			;;
+		o)
+			outfile="$OPTARG"
+			info "Output file is: '$outfile'"
+			;;
+		s)
+			size="$OPTARG"
+			if [ "$size" -eq "$size" ] 2>/dev/null
+			then
+				info "Chunk size is: '$size'"
+			else
+				errquit "Size $size is not a number."
+			fi
+			;;
+		n)
+			minsize="$OPTARG"
+			if [ "$minsize" -eq "$minsize" ] 2>/dev/null
+			then
+				info "Min chunk size is: '$minsize'"
+			else
+				errquit "Min chunk size $minsize is not a number."
+			fi
+			;;
+		x)
+			maxsize="$OPTARG"
+			if [ "$maxsize" -eq "$maxsize" ] 2>/dev/null
+			then
+				info "Max chunk size is: '$maxsize'"
+			else
+				errquit "Max chunk size $maxsize is not a number."
+			fi
+			;;
+		r)
+			randomsize=1
+			info "A random-sized subset of the file will be chosen."
+			;;
+		a)
+			append="conv=notrunc oflag=append"
+			# will append instead of overwrite
+			;;
+		q)
+			ok_if_short=1
+			# just copy entire file if it is not large enough
+			;;
+		p)
+			#seeding with non-numeric values always yields 20034 
+			seed="$OPTARG"
+			if [ "$seed" -eq "$seed" ] 2>/dev/null
+			then
+				info "Seed is $seed."
+				RANDOM="$seed"
+			else
+				errquit "Seed $seed is not a number."
+			fi
+			;;
+		#v)
+			# enable verbose mode
+			#VERBOSE=1
+			#	;;
+		esac
+	done
 
 if [ -z $seed ] ; then
   echo "-p option required"
