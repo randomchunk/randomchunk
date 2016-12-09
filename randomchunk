@@ -112,11 +112,6 @@ do
   esac
 done
 
-if [ -z $seed ] ; then
-  echo "-p option required"
-  exit 0
-fi
-
 if [ -z "$infile" ] || [ -z $outfile ]
 then
 	echo "randomchunk -- extract a random chunk from a large file"
@@ -133,6 +128,11 @@ then
 	#echo "	-v		be verbose"
 	echo ""
   exit 1
+fi
+
+if [ -z $seed ] ; then
+  echo "-p option required"
+  exit 0
 fi
 
 # get file size
