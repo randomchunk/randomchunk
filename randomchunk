@@ -58,15 +58,6 @@ do
   case $OPTION in
 	i)
 	  infile="$OPTARG"
-    if [ -f "$infile" ]
-    then
-    	if [ ! -r "$infile" ]
-    	then
-    	  errquit "Infile '$infile' exists but is not readable." 
-    	fi
-      else
-    	  errquit "Infile '$infile' does not exist." 
-    fi
 
 	  info "Input file is: '$infile'"
 	  ;;
@@ -76,30 +67,12 @@ do
 	  ;;
 	s)
 		size="$OPTARG"
-    if [ "$size" -eq "$size" ] 2>/dev/null
-    then
-	    info "Chunk size is: '$size'"
-    else
-      errquit "Size $size is not a number."
-    fi
 	  ;;
 	n)
 		minsize="$OPTARG"
-    if [ "$minsize" -eq "$minsize" ] 2>/dev/null
-    then
-	    info "Min chunk size is: '$minsize'"
-    else
-      errquit "Min chunk size $minsize is not a number."
-    fi
 	  ;;
 	x)
 		maxsize="$OPTARG"
-    if [ "$maxsize" -eq "$maxsize" ] 2>/dev/null
-    then
-	    info "Max chunk size is: '$maxsize'"
-    else
-      errquit "Max chunk size $maxsize is not a number."
-    fi
 	  ;;
 	r)
 	  randomsize=1
@@ -116,13 +89,6 @@ do
 	p)
 	  #seeding with non-numeric values always yields 20034 
 	  seed="$OPTARG"
-    if [ "$seed" -eq "$seed" ] 2>/dev/null
-    then
-	    info "Seed is $seed."
-	    RANDOM="$seed"
-    else
-      errquit "Seed $seed is not a number."
-    fi
 		;;
 	#v)
 		# enable verbose mode
@@ -131,13 +97,36 @@ do
   esac
 done
 
+# checks
+
+# does seed exist?
 if [ -z $seed ] ; then
 	usage
+fi
+
+# is it a number?
+if [ "$seed" -eq "$seed" ] 2>/dev/null
+then
+	info "Seed is $seed."
+	RANDOM="$seed"
+else
+  errquit "Seed $seed is not a number."
 fi
 
 if [ -z "$infile" ] || [ -z $outfile ]
 then
 	usage
+fi
+
+# check to see that infile exists and is readable
+if [ -f "$infile" ]
+then
+	if [ ! -r "$infile" ]
+	then
+		errquit "Infile '$infile' exists but is not readable." 
+	fi
+else
+	errquit "Infile '$infile' does not exist." 
 fi
 
 # get file size
@@ -148,6 +137,32 @@ then
   #errquit "No size specified (must specify -s or -r)"
   usage
 fi
+
+# make sure size is a number
+if [ "$size" -eq "$size" ] 2>/dev/null
+then
+	info "Chunk size is: '$size'"
+else
+	errquit "Size $size is not a number."
+fi
+
+# make sure minsize is a number
+if [ "$minsize" -eq "$minsize" ] 2>/dev/null
+then
+	info "Min chunk size is: '$minsize'"
+else
+	errquit "Min chunk size $minsize is not a number."
+fi
+
+# make sure maxsize is a number
+if [ "$maxsize" -eq "$maxsize" ] 2>/dev/null
+then
+	info "Max chunk size is: '$maxsize'"
+else
+  errquit "Max chunk size $maxsize is not a number."
+fi
+
+
 
 if [ ! -z $size ]
 then
