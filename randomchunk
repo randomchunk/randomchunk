@@ -14,6 +14,25 @@ randomsize=0
 append=""
 VERBOSE=0
 
+function usage
+{
+	echo "randomchunk -- extract a random chunk from a large file"
+	echo "usage: randomchunk -i infile -o outfile -s size -p SEED" 
+	echo "	-i infile	file to read chunk from"
+	echo "	-o outfile	file to write chunk to"
+	echo "	-s size		size (in kilobytes) of output"
+	echo "	-p seed		seed for the PRNG"
+	echo "	-r		make a random size chunk"
+	echo "	-n		minimum size for -r (in KB)"
+	echo "	-x		maximum size for -r (in KB)"
+	echo "	-a		append to ouput file rather than overwriting"
+	echo "	-q		if file is not large enough, just copy entire file"
+	#echo "	-v		be verbose"
+	echo ""
+  	exit 1
+}
+
+
 function errquit 
 {
 	if [[ $VERBOSE == 1 ]]
@@ -113,26 +132,12 @@ do
 done
 
 if [ -z $seed ] ; then
-  echo "-p option required"
-  exit 0
+	usage
 fi
 
 if [ -z "$infile" ] || [ -z $outfile ]
 then
-	echo "randomchunk -- extract a random chunk from a large file"
-	echo "usage: randomchunk -i infile -o outfile -s size"
-	echo "	-i infile	file to read chunk from"
-	echo "	-o outfile	file to write chunk to"
-	echo "	-s size		size (in kilobytes) of output"
-	echo "	-p seed		seed for the PRNG"
-	echo "	-r		make a random size chunk"
-	echo "	-n		minimum size for -r (in KB)"
-	echo "	-x		maximum size for -r (in KB)"
-	echo "	-a		append to ouput file rather than overwriting"
-	echo "	-q		if file is not large enough, just copy entire file"
-	#echo "	-v		be verbose"
-	echo ""
-  exit 1
+	usage
 fi
 
 # get file size
@@ -140,7 +145,8 @@ infilesize=$(( $(stat -c%s "$infile") / 1024 ))
 
 if [ -z $size ] && ! [ $randomsize == 1 ]
 then
-  errquit "No size specified (must specify -s or -r)"
+  #errquit "No size specified (must specify -s or -r)"
+  usage
 fi
 
 if [ ! -z $size ]
