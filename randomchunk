@@ -146,22 +146,25 @@ else
 	errquit "Size $size is not a number."
 fi
 
-# make sure minsize is a number
-if [ "$minsize" -eq "$minsize" ] 2>/dev/null
+if [[ $randomsize == 1 ]]
 then
-	info "Min chunk size is: '$minsize'"
-else
-	errquit "Min chunk size $minsize is not a number."
-fi
 
-# make sure maxsize is a number
-if [ "$maxsize" -eq "$maxsize" ] 2>/dev/null
-then
-	info "Max chunk size is: '$maxsize'"
-else
-  errquit "Max chunk size $maxsize is not a number."
-fi
+	# make sure minsize is a number
+	if [ "$minsize" -eq "$minsize" ] 2>/dev/null
+	then
+		info "Min chunk size is: '$minsize'"
+	else
+		errquit "Min chunk size $minsize is not a number."
+	fi
 
+	# make sure maxsize is a number
+	if [ "$maxsize" -eq "$maxsize" ] 2>/dev/null
+	then
+		info "Max chunk size is: '$maxsize'"
+	else
+	  errquit "Max chunk size $maxsize is not a number."
+	fi
+fi
 
 
 if [ ! -z $size ]
